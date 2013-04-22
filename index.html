@@ -74,7 +74,7 @@
         init: function () {
             this.drawSnake();
             $(document).keydown($.proxy(this.handleKeyup, this));
-            this.timer = setInterval($.proxy(this.gostep, this), 50);
+            this.timer = setInterval($.proxy(this.gostep, this), 40);
 
         },
         gostep: function () {
