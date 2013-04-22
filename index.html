@@ -12,9 +12,10 @@
         });
     </script>
     <style type="text/css">
-        .container{
+        .container {
             margin: 20px 0 0 30px;
         }
+
         #container {
             width: 500px;
             height: 500px;
@@ -38,7 +39,9 @@
         .food {
             background: darkgreen;
         }
-
+        .result{
+            margin:10px;
+        }
     </style>
 </head>
 <body>
@@ -48,7 +51,11 @@
 
     <div id="container">
     </div>
+    <div class="result">
+        当前成绩：<strong id="num">0</strong>
+    </div>
 </div>
+
 <script type="text/javascript">
     //每个结点，都对应着一个坐标，如[12,13]代表它应该出现的位置。
 
@@ -56,24 +63,18 @@
         rows: 25,
         cols: 25,
         snakes: [
-            [3, 4, 1],
-            [3, 5],
-            [3, 6],
-            [4, 6],
-            [5, 6],
-            [5, 7],
-            [5, 8],
-            [5, 9]
+            [3, 4]
 
         ],//蛇身数据，每个元素是坐标[x,y]
         container: $("#container"),
         currentDir: 'right',
         food: [8, 8],
         timer: null,
+        result: 0,
         init: function () {
             this.drawSnake();
             $(document).keydown($.proxy(this.handleKeyup, this));
-            this.timer = setInterval($.proxy(this.gostep, this), 40);
+            this.timer = setInterval($.proxy(this.gostep, this), 50);
 
         },
         gostep: function () {
@@ -96,12 +97,16 @@
         step: function (dir) {
             var head = this.gonext(this.currentDir);
             //与身体重合
-            for (var i = 1, s; s = this.snakes[i]; i++) {
-                if (this.compare(s, head)) {
-                    alert('game over');
+            if (this.snakes.length > 1)
+                for (var i = 1, s; s = this.snakes[i]; i++) {
+                    if (this.compare(s, head)) {
+                        alert('game over');
+                        location.reload();
+                    }
                 }
-            }
             if (this.compare(head, this.food)) {
+                this.result++;
+                $('#num').html(this.result);
                 this.genNewFood();
             } else {
                 this.snakes.pop();
@@ -137,7 +142,7 @@
             var next = this.snakes[1];
 
             //与上一个重合
-            if (this.compare(next, head)) {
+            if (this.snakes[1] && this.compare(this.snakes[1], head)) {
                 return;
             }
 
